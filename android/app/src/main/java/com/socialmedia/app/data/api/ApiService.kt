@@ -18,6 +18,9 @@ interface ApiService {
     @GET("api/auth/users")
     suspend fun getUsers(): Response<List<User>>
     
+    @GET("api/auth/users/search")
+    suspend fun searchUsers(@Query("q") query: String): Response<List<User>>
+    
     @POST("api/messages")
     suspend fun sendMessage(@Body request: SendMessageRequest): Response<Message>
     

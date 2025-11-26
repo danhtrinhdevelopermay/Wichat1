@@ -5,6 +5,8 @@ import androidx.lifecycle.viewModelScope
 import com.socialmedia.app.data.api.RetrofitClient
 import com.socialmedia.app.data.model.*
 import com.socialmedia.app.data.websocket.WebSocketManager
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -13,10 +15,20 @@ class ChatViewModel : ViewModel() {
     private val _users = MutableStateFlow<List<User>>(emptyList())
     val users: StateFlow<List<User>> = _users
     
+    private val _searchResults = MutableStateFlow<List<User>>(emptyList())
+    val searchResults: StateFlow<List<User>> = _searchResults
+    
+    private val _isSearching = MutableStateFlow(false)
+    val isSearching: StateFlow<Boolean> = _isSearching
+    
+    private val _searchQuery = MutableStateFlow("")
+    val searchQuery: StateFlow<String> = _searchQuery
+    
     private val _messages = MutableStateFlow<List<Message>>(emptyList())
     val messages: StateFlow<List<Message>> = _messages
     
     private val webSocketManager = WebSocketManager()
+    private var searchJob: Job? = null
     
     fun loadUsers() {
         viewModelScope.launch {
@@ -29,6 +41,54 @@ class ChatViewModel : ViewModel() {
                 println("Error loading users: ${e.message}")
             }
         }
+    }
+    
+    fun updateSearchQuery(query: String) {
+        _searchQuery.value = query
+        searchJob?.cancel()
+        
+        if (query.isBlank()) {
+            _searchResults.value = emptyList()
+            _isSearching.value = false
+            return
+        }
+        
+        _isSearching.value = true
+        searchJob = viewModelScope.launch {
+            delay(300)
+            searchUsers(query)
+        }
+    }
+    
+    private suspend fun searchUsers(query: String) {
+        try {
+            val response = RetrofitClient.apiService.searchUsers(query)
+            if (response.isSuccessful && response.body() != null) {
+                _searchResults.value = response.body()!!
+            } else {
+                val allUsers = _users.value
+                _searchResults.value = allUsers.filter { user ->
+                    user.username.contains(query, ignoreCase = true) ||
+                    user.displayName.contains(query, ignoreCase = true) ||
+                    user.email.contains(query, ignoreCase = true)
+                }
+            }
+        } catch (e: Exception) {
+            val allUsers = _users.value
+            _searchResults.value = allUsers.filter { user ->
+                user.username.contains(query, ignoreCase = true) ||
+                user.displayName.contains(query, ignoreCase = true) ||
+                user.email.contains(query, ignoreCase = true)
+            }
+        } finally {
+            _isSearching.value = false
+        }
+    }
+    
+    fun clearSearch() {
+        _searchQuery.value = ""
+        _searchResults.value = emptyList()
+        _isSearching.value = false
     }
     
     fun loadMessages(userId: Int) {
@@ -54,7 +114,6 @@ class ChatViewModel : ViewModel() {
                     val newMessage = response.body()!!
                     _messages.value = _messages.value + newMessage
                     
-                    // Send via WebSocket for real-time
                     webSocketManager.sendMessage(
                         ChatMessage(
                             type = "message",
