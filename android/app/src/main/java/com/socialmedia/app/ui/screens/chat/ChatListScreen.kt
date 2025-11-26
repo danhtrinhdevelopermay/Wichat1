@@ -60,7 +60,7 @@ fun ChatListScreen(
                         user = user,
                         onClick = { onChatClick(user.id) }
                     )
-                    Divider()
+                    HorizontalDivider()
                 }
             }
         }
