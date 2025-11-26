@@ -154,7 +154,7 @@ fun SearchBar(
                 value = query,
                 onValueChange = onQueryChange,
                 modifier = Modifier.weight(1f),
-                placeholder = { Text("Tìm kiếm người dùng...") },
+                placeholder = { Text("Nhập tên hoặc username...") },
                 singleLine = true,
                 colors = TextFieldDefaults.colors(
                     focusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
