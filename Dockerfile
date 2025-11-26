@@ -6,10 +6,9 @@ WORKDIR /home/gradle/src
 
 # Copy Gradle files first for caching
 COPY --chown=gradle:gradle build.gradle.kts settings.gradle.kts gradle.properties ./
-COPY --chown=gradle:gradle gradle ./gradle
 
 # Download dependencies (cached layer)
-RUN gradle dependencies --no-daemon || return 0
+RUN gradle dependencies --no-daemon || true
 
 # Copy source code
 COPY --chown=gradle:gradle src ./src

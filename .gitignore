@@ -1,7 +1,7 @@
 # Gradle files
 .gradle/
 build/
-gradle/
+!gradle/wrapper/
 
 # Local configuration file
 local.properties

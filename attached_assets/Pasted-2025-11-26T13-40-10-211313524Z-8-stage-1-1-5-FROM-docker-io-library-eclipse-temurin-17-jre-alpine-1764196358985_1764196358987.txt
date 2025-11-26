@@ -1,0 +1,50 @@
+2025-11-26T13:40:10.211313524Z #8 [stage-1 1/5] FROM docker.io/library/eclipse-temurin:17-jre-alpine@sha256:f57e47e7a78ae1ff5019681d95a4964153b0d1078bdff2a2f288e4a5ee329c14
+2025-11-26T13:40:10.211317034Z #8 resolve docker.io/library/eclipse-temurin:17-jre-alpine@sha256:f57e47e7a78ae1ff5019681d95a4964153b0d1078bdff2a2f288e4a5ee329c14
+2025-11-26T13:40:11.831933682Z #8 ...
+2025-11-26T13:40:11.831952063Z 
+2025-11-26T13:40:11.831957853Z #9 [build 1/7] FROM docker.io/library/gradle:8.5-jdk17@sha256:7704366590930c03de7e514008ba3d7b7031b92591bd5a74fae79c16f3a17726
+2025-11-26T13:40:11.831964053Z #9 resolve docker.io/library/gradle:8.5-jdk17@sha256:7704366590930c03de7e514008ba3d7b7031b92591bd5a74fae79c16f3a17726 1.6s done
+2025-11-26T13:40:11.831970293Z #9 DONE 1.8s
+2025-11-26T13:40:11.961133404Z 
+2025-11-26T13:40:11.961152285Z #8 [stage-1 1/5] FROM docker.io/library/eclipse-temurin:17-jre-alpine@sha256:f57e47e7a78ae1ff5019681d95a4964153b0d1078bdff2a2f288e4a5ee329c14
+2025-11-26T13:40:11.961156885Z #8 resolve docker.io/library/eclipse-temurin:17-jre-alpine@sha256:f57e47e7a78ae1ff5019681d95a4964153b0d1078bdff2a2f288e4a5ee329c14 1.9s done
+2025-11-26T13:40:16.791730499Z #8 ...
+2025-11-26T13:40:16.791744129Z 
+2025-11-26T13:40:16.791747609Z #7 [internal] load build context
+2025-11-26T13:40:16.7917508Z #7 transferring context: 33.36kB done
+2025-11-26T13:40:16.7917537Z #7 DONE 5.0s
+2025-11-26T13:40:16.990968203Z 
+2025-11-26T13:40:16.990991873Z #10 [build 2/7] WORKDIR /home/gradle/src
+2025-11-26T13:40:16.990998224Z #10 CACHED
+2025-11-26T13:40:16.991004074Z 
+2025-11-26T13:40:16.991008344Z #11 [build 3/7] COPY --chown=gradle:gradle build.gradle.kts settings.gradle.kts gradle.properties ./
+2025-11-26T13:40:16.991011944Z #11 CACHED
+2025-11-26T13:40:16.991015234Z 
+2025-11-26T13:40:16.991021114Z #12 [build 4/7] COPY --chown=gradle:gradle gradle ./gradle
+2025-11-26T13:40:16.991035464Z #12 ERROR: failed to calculate checksum of ref kxoi4kd40nsj64se6e36143j3::m46bujewmda2ur1gyrm335k0u: "/gradle": not found
+2025-11-26T13:40:16.991037694Z 
+2025-11-26T13:40:16.991039874Z #9 [build 1/7] FROM docker.io/library/gradle:8.5-jdk17@sha256:7704366590930c03de7e514008ba3d7b7031b92591bd5a74fae79c16f3a17726
+2025-11-26T13:40:16.991042005Z #9 DONE 7.0s
+2025-11-26T13:40:16.991044694Z 
+2025-11-26T13:40:16.991049135Z #8 [stage-1 1/5] FROM docker.io/library/eclipse-temurin:17-jre-alpine@sha256:f57e47e7a78ae1ff5019681d95a4964153b0d1078bdff2a2f288e4a5ee329c14
+2025-11-26T13:40:17.061448445Z #8 sha256:2d35ebdb57d9971fea0cac1582aa78935adf8058b2cc32db163c98822e5dfa1b 0B / 3.80MB 0.1s
+2025-11-26T13:40:17.061461005Z #8 sha256:867c03b825a35a5db0249203ef051f7e12f2bc4c110f281f6de68072d3c55bab 0B / 2.28kB 0.1s
+2025-11-26T13:40:17.061464565Z #8 sha256:90f0c913436040e8043051a25779be2670ee72a7efec25b6e4bbb08d54877db4 0B / 126B 0.1s
+2025-11-26T13:40:17.061468155Z #8 sha256:5b8007edd66bab6d1c68463c2a313deb13b319de66422e9b16eaf4a14de89248 0B / 46.72MB 0.1s
+2025-11-26T13:40:17.061471895Z #8 ...
+2025-11-26T13:40:17.061475036Z 
+2025-11-26T13:40:17.061479456Z #13 [stage-1 2/5] RUN apk add --no-cache curl
+2025-11-26T13:40:17.061483206Z #13 CANCELED
+2025-11-26T13:40:17.061486596Z ------
+2025-11-26T13:40:17.061490906Z  > [build 4/7] COPY --chown=gradle:gradle gradle ./gradle:
+2025-11-26T13:40:17.061494206Z ------
+2025-11-26T13:40:17.062306894Z Dockerfile:9
+2025-11-26T13:40:17.062318794Z --------------------
+2025-11-26T13:40:17.062321714Z    7 |     # Copy Gradle files first for caching
+2025-11-26T13:40:17.062323694Z    8 |     COPY --chown=gradle:gradle build.gradle.kts settings.gradle.kts gradle.properties ./
+2025-11-26T13:40:17.062325674Z    9 | >>> COPY --chown=gradle:gradle gradle ./gradle
+2025-11-26T13:40:17.062327575Z   10 |     
+2025-11-26T13:40:17.062329275Z   11 |     # Download dependencies (cached layer)
+2025-11-26T13:40:17.062331055Z --------------------
+2025-11-26T13:40:17.062333604Z error: failed to solve: failed to compute cache key: failed to calculate checksum of ref kxoi4kd40nsj64se6e36143j3::m46bujewmda2ur1gyrm335k0u: "/gradle": not found
+2025-11-26T13:40:17.080893449Z error: exit status 1
