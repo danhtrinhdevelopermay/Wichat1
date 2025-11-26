@@ -1,5 +1,6 @@
 package com.socialmedia.app.data.api
 
+import com.google.gson.GsonBuilder
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -10,6 +11,7 @@ import java.util.concurrent.TimeUnit
 object RetrofitClient {
     private const val BASE_URL = "https://wichat-backend.onrender.com/"
     
+    @Volatile
     private var authToken: String? = null
     
     fun setAuthToken(token: String) {
@@ -20,8 +22,13 @@ object RetrofitClient {
         authToken = null
     }
     
+    fun getAuthToken(): String? = authToken
+    
     private val authInterceptor = Interceptor { chain ->
         val requestBuilder = chain.request().newBuilder()
+            .addHeader("Content-Type", "application/json")
+            .addHeader("Accept", "application/json")
+        
         authToken?.let {
             requestBuilder.addHeader("Authorization", "Bearer $it")
         }
@@ -35,15 +42,20 @@ object RetrofitClient {
     private val okHttpClient = OkHttpClient.Builder()
         .addInterceptor(authInterceptor)
         .addInterceptor(loggingInterceptor)
-        .connectTimeout(30, TimeUnit.SECONDS)
-        .readTimeout(30, TimeUnit.SECONDS)
-        .writeTimeout(30, TimeUnit.SECONDS)
+        .connectTimeout(60, TimeUnit.SECONDS)
+        .readTimeout(60, TimeUnit.SECONDS)
+        .writeTimeout(60, TimeUnit.SECONDS)
+        .retryOnConnectionFailure(true)
         .build()
+    
+    private val gson = GsonBuilder()
+        .setLenient()
+        .create()
     
     private val retrofit = Retrofit.Builder()
         .baseUrl(BASE_URL)
         .client(okHttpClient)
-        .addConverterFactory(GsonConverterFactory.create())
+        .addConverterFactory(GsonConverterFactory.create(gson))
         .build()
     
     val apiService: ApiService = retrofit.create(ApiService::class.java)
